@@ -1,0 +1,66 @@
+# Local configuration
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+
+# Environments and caches
+.venv/
+venv/
+env/
+conda-meta/
+.cache/
+huggingface/
+hf_cache/
+torch_cache/
+wandb/
+
+# Audio, datasets, and generated features
+data/
+datasets/
+audio/
+*.wav
+*.flac
+*.mp3
+*.aac
+*.m4a
+*.ogg
+*.opus
+*.npy
+*.npz
+*.parquet
+
+# Models and experiment artifacts
+models/
+checkpoints/
+outputs/
+runs/
+logs/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.log
+
+# Editors and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.part

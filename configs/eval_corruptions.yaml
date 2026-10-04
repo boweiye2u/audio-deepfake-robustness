@@ -1,0 +1,33 @@
+evaluation:
+  source_split: eval
+  model_selection_allowed: false
+  output_dir: ${AUDIO_OUTPUT_ROOT}/corruptions
+
+conditions:
+  - name: clean
+    kind: identity
+  - name: mp3_128k
+    kind: mp3
+    bitrate_kbps: 128
+  - name: mp3_64k
+    kind: mp3
+    bitrate_kbps: 64
+  - name: mp3_32k
+    kind: mp3
+    bitrate_kbps: 32
+  - name: resample_8k_roundtrip
+    kind: resample_roundtrip
+    intermediate_sample_rate: 8000
+  - name: noise_20db
+    kind: additive_noise
+    snr_db: 20
+  - name: noise_10db
+    kind: additive_noise
+    snr_db: 10
+  - name: noise_5db
+    kind: additive_noise
+    snr_db: 5
+
+report:
+  metrics: [eer, roc_auc, balanced_accuracy, precision, recall, f1]
+  relative_degradation_reference: clean

@@ -1,0 +1,42 @@
+experiment:
+  name: baseline_logmel_cnn
+  seed: 20261004
+
+paths:
+  train_manifest: ${AUDIO_DATA_ROOT}/asvspoof/2019-la/manifests/train.csv
+  dev_manifest: ${AUDIO_DATA_ROOT}/asvspoof/2019-la/manifests/dev.csv
+  eval_manifest: ${AUDIO_DATA_ROOT}/asvspoof/2019-la/manifests/eval.csv
+  checkpoint_dir: ${AUDIO_MODEL_ROOT}/checkpoints/baseline
+  output_dir: ${AUDIO_OUTPUT_ROOT}/experiments/baseline
+
+audio:
+  sample_rate: 16000
+  duration_seconds: 4.0
+  mono: true
+
+features:
+  n_fft: 512
+  win_length: 400
+  hop_length: 160
+  n_mels: 80
+  f_min: 20
+  f_max: 8000
+
+model:
+  name: compact_logmel_cnn
+  channels: [32, 64, 128]
+  dropout: 0.2
+
+training:
+  epochs: 30
+  batch_size: 64
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  num_workers: 8
+  selection_metric: dev_eer
+  early_stopping_patience: 5
+
+evaluation:
+  positive_label: spoof
+  threshold_source: dev
+  metrics: [eer, roc_auc, balanced_accuracy, precision, recall, f1]

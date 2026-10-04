@@ -1,0 +1,19 @@
+experiment:
+  name: mixed_condition_logmel_cnn
+  seed: 20261004
+
+base_config: configs/baseline.yaml
+
+augmentation:
+  probability: 0.6
+  clean_probability: 0.4
+  choices:
+    mp3_kbps: [128, 64, 32]
+    resample_hz: [8000]
+    noise_snr_db: [20, 10, 5]
+
+comparison:
+  baseline_checkpoint: ${AUDIO_MODEL_ROOT}/checkpoints/baseline/best.pt
+  robust_checkpoint_dir: ${AUDIO_MODEL_ROOT}/checkpoints/robust
+  output_dir: ${AUDIO_OUTPUT_ROOT}/experiments/robust
+  final_seeds: [20261004, 20261005, 20261006]
