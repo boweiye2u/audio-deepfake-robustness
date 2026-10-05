@@ -3,8 +3,8 @@
 A reproducible study of how synthetic-speech detectors respond to realistic audio
 transformations and whether targeted augmentation can improve robustness.
 
-> **Status:** clean WavLM baseline completed on the official development split.
-> Final evaluation and robustness experiments remain untouched.
+> **Status:** frozen WavLM baseline and corruption robustness evaluation completed
+> on the official development split. The official evaluation split remains untouched.
 
 ## Research question
 
@@ -12,19 +12,17 @@ How much does a clean-trained synthetic-speech detector degrade under compressio
 resampling, and additive noise, and can mixed-condition training recover performance
 without sacrificing clean accuracy?
 
-## Planned experimental design
+## Experimental design
 
 - **Dataset:** ASVspoof 2019 Logical Access, official protocols validated
-- **Baseline:** compact CNN over log-Mel spectrograms
+- **Baseline:** frozen WavLM Base Plus encoder with a compact linear head
 - **Model selection:** official development split only
 - **Final evaluation:** untouched official evaluation split
 - **Metrics:** EER, ROC-AUC, balanced accuracy, precision, recall, and F1
 - **Shifts:** MP3 128/64/32 kbps, 8 kHz round-trip resampling, noise at 20/10/5 dB SNR
 - **Mitigation:** mixed-condition corruption augmentation
-- **Final comparison:** three seeds when practical, with bootstrap uncertainty
+- **Uncertainty:** paired utterance bootstrap intervals for corruption comparisons
 
-No result values will be added until the complete protocol has been executed and
-validated.
 
 ## Filesystem separation
 
@@ -67,7 +65,7 @@ environments/  Portable environment specification
 ## Environment
 
 Python 3.11 is the target runtime. The isolated environment provides ffmpeg with
-MP3 support for later compression experiments.
+MP3 support for deterministic compression experiments.
 
 ~~~bash
 conda env create --prefix "$HOME/audio/envs/audio-deepfake" \
@@ -89,11 +87,21 @@ These are development-set results used for model selection, not final evaluation
 |---|---:|---:|---:|---:|---:|
 | Frozen WavLM Base Plus + linear head | 0.0522 | 0.9898 | 0.9988 | 0.9500 | 0.9627 |
 
+## DEV robustness
+
+The frozen baseline was evaluated at its unchanged clean threshold. MP3 and an 8 kHz
+round trip did not degrade ranking on DEV, while additive noise was the clear failure
+mode: EER increased from 0.0522 clean to 0.1035, 0.2260, and 0.3902 at 20, 10, and
+5 dB SNR. See the [Phase 4 robustness report](docs/phase4-robustness-report.md) for
+paired confidence intervals, attack-specific results, score shifts, and limitations.
+
 ## Limitations
 
-- Final claims remain pending corpus validation and model experiments.
-- No clean or shifted benchmark has been run.
-- Results will apply to the selected corpus, model, and corruption definitions rather
-  than all synthetic speech in deployment.
+- A01–A06 occur in training; robustness to unseen attack systems is not yet measured.
+- DEV selected the checkpoint and threshold, so DEV robustness results are development
+  findings rather than final generalization estimates.
+- The official evaluation split remains untouched.
+- Compression and noise tests measure post-processing robustness, not adversarial
+  robustness or every real deployment condition.
 
 See [the methodology](docs/methodology.md) for the frozen evaluation principles.
