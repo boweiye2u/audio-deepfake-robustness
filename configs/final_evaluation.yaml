@@ -1,3 +1,91 @@
-purpose: final_evaluation
-model_selection_allowed: false
-manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/final-evaluation/eval.csv
+protocol:
+  id: wavlm-final-evaluation-v1
+  purpose: final_evaluation
+  model_selection_allowed: false
+  retraining_allowed: false
+  source_commit_before_protocol: 22c478a3429c8c5e78201af0ab58d2ff864b1e56
+  frozen_at_utc: "2026-10-05T18:31:42Z"
+
+dataset:
+  name: ASVspoof 2019 Logical Access
+  split: eval
+  manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/final-evaluation/eval.csv
+  manifest_sha256: 65ef0e4c029a8b765c4c64fb1b126991e05ec9457ce9a67eed9a8561927e15f8
+  expected_trials: 71237
+  expected_bonafide: 7355
+  expected_spoof: 63882
+  expected_attack_ids: [A07, A08, A09, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19]
+  exclude_unreferenced_audio_files: 696
+
+encoder:
+  model: microsoft/wavlm-base-plus
+  revision: 4c66d4806a428f2e922ccfa1a962776e232d487b
+  frozen: true
+  pooling: masked_mean_last_hidden_state
+  sample_rate: 16000
+  max_duration_seconds: 4.0
+  crop_strategy: center
+  precision: bfloat16_encoder_fp32_head
+
+models:
+  baseline:
+    checkpoint: ${AUDIO_MODEL_ROOT}/audio-deepfake/wavlm-base-plus-frozen-v1/full/selected.pt
+    checkpoint_sha256: 0d16ce385c2171c4a161dd6ff4c66f8570b9b0b4f1b990c2e7bfb93117fa9800
+    selected_epoch: 30
+    threshold: 0.693742573261261
+  robust:
+    augmentation_probability: 0.20
+    seeds: [20261010, 20261011, 20261012]
+    checkpoints:
+      "20261010":
+        path: ${AUDIO_MODEL_ROOT}/audio-deepfake/wavlm-noise-augmented-p20-v1/seed-20261010/selected.pt
+        sha256: b23b9dc597c911d1a35cbda3ff62f3318794d10288577c3df1f965c3f1c21be4
+        selected_epoch: 28
+        threshold: 0.5731223225593567
+      "20261011":
+        path: ${AUDIO_MODEL_ROOT}/audio-deepfake/wavlm-noise-augmented-p20-v1/seed-20261011/selected.pt
+        sha256: c9820dc64a4b6c457a289858718a6711522680f301f6772b1fe7142d1f7bd5b9
+        selected_epoch: 28
+        threshold: 0.5245580077171326
+      "20261012":
+        path: ${AUDIO_MODEL_ROOT}/audio-deepfake/wavlm-noise-augmented-p20-v1/seed-20261012/selected.pt
+        sha256: e848db9c934a853fc52c6378c9bc6cdfccb85c26e50703dfb963cce4a98cf695
+        selected_epoch: 30
+        threshold: 0.4959649443626404
+
+corruptions:
+  implementation_sha256: 8594310475fc217b6af0130e0cbe0e1b362760264679a31d1c50522340c3e924
+  deterministic_seed: 20261008
+  conditions:
+    - {name: clean, kind: clean}
+    - {name: mp3_128k, kind: mp3, parameter: 128, unit: kbps}
+    - {name: mp3_64k, kind: mp3, parameter: 64, unit: kbps}
+    - {name: mp3_32k, kind: mp3, parameter: 32, unit: kbps}
+    - {name: resample_8k, kind: resample, parameter: 8000, unit: Hz}
+    - {name: noise_20db, kind: noise, parameter: 20, unit: dB}
+    - {name: noise_10db, kind: noise, parameter: 10, unit: dB}
+    - {name: noise_5db, kind: noise, parameter: 5, unit: dB}
+
+metrics:
+  implementation_sha256: bc6f730b216054fc47842faf502d33f9a7e80a1de9273f930e5b2180420f8d8d
+  primary: [eer, roc_auc, pr_auc, balanced_accuracy]
+  additional: [precision, recall, f1, confusion_matrix]
+  positive_label: spoof
+  threshold_dependent_metrics_use_dev_thresholds: true
+  robust_reporting: per_seed_and_unweighted_mean_sample_sd
+  prediction_ensemble: false
+
+uncertainty:
+  method: paired_class_stratified_eval_utterance_bootstrap_robust_mean_over_three_seeds
+  comparisons: [robust_minus_baseline]
+  metrics: [eer, roc_auc, balanced_accuracy, f1]
+  conditions: [clean, noise_20db, noise_10db, noise_5db]
+  replicates: 2000
+  confidence: 0.95
+  seed: 20261021
+
+inference:
+  batch_size: 32
+  num_workers: 8
+  feature_cache: ${AUDIO_CACHE_ROOT}/features/wavlm-final-evaluation-v1
+  output_dir: ${AUDIO_OUTPUT_ROOT}/experiments/wavlm-final-evaluation-v1

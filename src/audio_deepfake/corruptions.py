@@ -158,9 +158,16 @@ class CorruptedAudioDataset(torch.utils.data.Dataset[dict[str, Any]]):
         sample_rate: int,
         max_duration_seconds: float,
         crop_strategy: str,
+        purpose: str = "development",
     ) -> None:
-        if any(record.split != "dev" for record in records):
-            raise PermissionError("robustness evaluation accepts DEV records only")
+        splits = {record.split for record in records}
+        permitted = splits == {"dev"} and purpose == "development"
+        permitted = permitted or (splits == {"eval"} and purpose == "final_evaluation")
+        if not permitted:
+            raise PermissionError(
+                "corruption evaluation accepts DEV for development or EVAL with "
+                "purpose='final_evaluation'"
+            )
         self.records = records
         self.spec = spec
         self.seed = seed

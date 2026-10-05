@@ -83,3 +83,16 @@ def test_paired_bootstrap_is_reproducible():
 def test_unknown_corruption_is_rejected():
     with pytest.raises(ValueError, match="unknown corruption"):
         apply_corruption(_signal(), CorruptionSpec("bad", "bad"), 1, "U1")
+
+
+def test_corrupted_dataset_requires_explicit_final_evaluation_purpose(tmp_path):
+    from audio_deepfake.baseline import AudioRecord
+    from audio_deepfake.corruptions import CORE_CORRUPTIONS, CorruptedAudioDataset
+
+    record = AudioRecord("E1", tmp_path / "unused.flac", "eval", 1, "S1", "A07", 1.0, 16000)
+    with pytest.raises(PermissionError, match="final_evaluation"):
+        CorruptedAudioDataset([record], CORE_CORRUPTIONS[0], 1, 16000, 4.0, "center")
+    dataset = CorruptedAudioDataset(
+        [record], CORE_CORRUPTIONS[0], 1, 16000, 4.0, "center", purpose="final_evaluation"
+    )
+    assert len(dataset) == 1

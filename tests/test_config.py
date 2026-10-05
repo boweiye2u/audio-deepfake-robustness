@@ -44,3 +44,18 @@ def test_baseline_config_expands_with_documented_roots(tmp_path, monkeypatch):
     config = load_config(repository / "configs" / "baseline.yaml")
     assert config["paths"]["train_manifest"].startswith(str(roots["AUDIO_DATA_ROOT"]))
     assert config["paths"]["checkpoint_dir"].startswith(str(roots["AUDIO_MODEL_ROOT"]))
+
+
+def test_final_evaluation_protocol_is_frozen(monkeypatch, tmp_path):
+    from audio_deepfake.config import load_config
+
+    for name in ["AUDIO_DATA_ROOT", "AUDIO_MODEL_ROOT", "AUDIO_CACHE_ROOT", "AUDIO_OUTPUT_ROOT"]:
+        monkeypatch.setenv(name, str(tmp_path))
+    config = load_config("configs/final_evaluation.yaml")
+    assert config["protocol"]["purpose"] == "final_evaluation"
+    assert not config["protocol"]["model_selection_allowed"]
+    assert not config["protocol"]["retraining_allowed"]
+    assert config["models"]["robust"]["augmentation_probability"] == 0.20
+    assert config["models"]["robust"]["seeds"] == [20261010, 20261011, 20261012]
+    assert len(config["corruptions"]["conditions"]) == 8
+    assert config["uncertainty"]["replicates"] == 2000
