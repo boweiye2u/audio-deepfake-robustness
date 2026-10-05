@@ -29,3 +29,18 @@ def test_config_expands_paths(tmp_path, monkeypatch):
     config = tmp_path / "config.yaml"
     config.write_text("manifest: ${AUDIO_DATA_ROOT}/manifest.csv\n")
     assert load_config(config)["manifest"] == str(tmp_path / "manifest.csv")
+
+
+def test_baseline_config_expands_with_documented_roots(tmp_path, monkeypatch):
+    roots = {
+        "AUDIO_DATA_ROOT": tmp_path / "data",
+        "AUDIO_MODEL_ROOT": tmp_path / "models",
+        "AUDIO_CACHE_ROOT": tmp_path / "cache",
+        "AUDIO_OUTPUT_ROOT": tmp_path / "outputs",
+    }
+    for name, value in roots.items():
+        monkeypatch.setenv(name, str(value))
+    repository = __import__("pathlib").Path(__file__).resolve().parents[1]
+    config = load_config(repository / "configs" / "baseline.yaml")
+    assert config["paths"]["train_manifest"].startswith(str(roots["AUDIO_DATA_ROOT"]))
+    assert config["paths"]["checkpoint_dir"].startswith(str(roots["AUDIO_MODEL_ROOT"]))
