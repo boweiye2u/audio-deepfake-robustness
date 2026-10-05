@@ -6,12 +6,16 @@ import platform
 import shutil
 import subprocess
 import sys
+from pathlib import Path
 
 from audio_deepfake.config import ArtifactRoots
 
 
 def command_version(command: str, flag: str = "--version") -> str | None:
     executable = shutil.which(command)
+    if executable is None:
+        environment_executable = Path(sys.prefix) / "bin" / command
+        executable = str(environment_executable) if environment_executable.is_file() else None
     if executable is None:
         return None
     result = subprocess.run([executable, flag], check=False, capture_output=True, text=True)

@@ -3,9 +3,8 @@ experiment:
   seed: 20261004
 
 paths:
-  train_manifest: ${AUDIO_DATA_ROOT}/asvspoof/2019-la/manifests/train.csv
-  dev_manifest: ${AUDIO_DATA_ROOT}/asvspoof/2019-la/manifests/dev.csv
-  eval_manifest: ${AUDIO_DATA_ROOT}/asvspoof/2019-la/manifests/eval.csv
+  train_manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/development/train.csv
+  dev_manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/development/dev.csv
   checkpoint_dir: ${AUDIO_MODEL_ROOT}/checkpoints/baseline
   output_dir: ${AUDIO_OUTPUT_ROOT}/experiments/baseline
 

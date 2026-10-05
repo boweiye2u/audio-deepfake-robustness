@@ -3,8 +3,8 @@
 A reproducible study of how synthetic-speech detectors respond to realistic audio
 transformations and whether targeted augmentation can improve robustness.
 
-> **Status:** environment and repository scaffold established. No dataset, model,
-> benchmark result, or robustness claim has been produced yet.
+> **Status:** environment and ASVspoof data preparation pipeline established. No
+> model, benchmark result, or robustness claim has been produced yet.
 
 ## Research question
 
@@ -14,7 +14,7 @@ without sacrificing clean accuracy?
 
 ## Planned experimental design
 
-- **Dataset:** ASVspoof 2019 Logical Access, pending access and protocol validation
+- **Dataset:** ASVspoof 2019 Logical Access, official protocols validated
 - **Baseline:** compact CNN over log-Mel spectrograms
 - **Model selection:** official development split only
 - **Final evaluation:** untouched official evaluation split
@@ -66,8 +66,8 @@ environments/  Portable environment specification
 
 ## Environment
 
-Python 3.11 is the target runtime. The host must also provide ffmpeg with MP3
-support before compression experiments can run.
+Python 3.11 is the target runtime. The isolated environment provides ffmpeg with
+MP3 support for later compression experiments.
 
 ~~~bash
 conda env create --prefix "$HOME/audio/envs/audio-deepfake" \
@@ -78,9 +78,8 @@ python scripts/check_environment.py
 python -m pytest
 ~~~
 
-CUDA-enabled PyTorch installation will be pinned after compatibility is verified in
-the isolated environment. Large downloads and training are intentionally deferred
-until dataset access, protocol mapping, and codec support pass their preflight checks.
+CUDA-enabled PyTorch 2.9.1 (CUDA 12.6) is installed in the isolated environment.
+Dataset preparation is separate from model training, which remains deferred.
 
 ## Results
 
@@ -92,8 +91,7 @@ Results are intentionally blank during setup.
 
 ## Limitations
 
-- ASVspoof access and protocol mapping have not yet been validated.
-- ffmpeg is not currently installed on the inspected host.
+- Final claims remain pending corpus validation and model experiments.
 - No clean or shifted benchmark has been run.
 - Results will apply to the selected corpus, model, and corruption definitions rather
   than all synthetic speech in deployment.

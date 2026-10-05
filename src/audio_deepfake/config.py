@@ -39,7 +39,7 @@ class ArtifactRoots:
     outputs: Path
 
     @classmethod
-    def from_environment(cls) -> "ArtifactRoots":
+    def from_environment(cls) -> ArtifactRoots:
         defaults = {
             "AUDIO_DATA_ROOT": "~/audio/data",
             "AUDIO_MODEL_ROOT": "~/audio/models",
@@ -68,5 +68,5 @@ class ArtifactRoots:
 def load_config(path: str | Path) -> dict[str, Any]:
     value = yaml.safe_load(Path(path).read_text())
     if not isinstance(value, dict):
-        raise ValueError("configuration root must be a mapping")
+        raise TypeError("configuration root must be a mapping")
     return _walk(value)

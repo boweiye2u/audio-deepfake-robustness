@@ -1,0 +1,19 @@
+dataset:
+  name: ASVspoof 2019 Logical Access
+  official_record: https://zenodo.org/records/6906306
+  download_url: https://zenodo.org/api/records/6906306/files/LA.zip/content
+  archive_size_bytes: 7640952520
+  archive_md5: 30c98f11d8b2bc21f2c257bfd78bb5c5
+
+paths:
+  dataset_root: ${AUDIO_DATA_ROOT}/asvspoof2019
+  archive: ${AUDIO_CACHE_ROOT}/downloads/asvspoof2019/LA.zip
+  train_manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/development/train.csv
+  dev_manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/development/dev.csv
+  final_evaluation_manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/final-evaluation/eval.csv
+
+partition_policy:
+  preserve_official_splits: true
+  development_splits: [train, dev]
+  final_evaluation_split: eval
+  allow_eval_for_model_selection: false

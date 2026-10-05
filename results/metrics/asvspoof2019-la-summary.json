@@ -1,0 +1,85 @@
+{
+  "dataset": "ASVspoof 2019 Logical Access",
+  "official_partitions_preserved": true,
+  "source": "https://zenodo.org/records/6906306",
+  "speaker_overlap": false,
+  "splits": {
+    "dev": {
+      "attack_ids": {
+        "-": 2548,
+        "A01": 3716,
+        "A02": 3716,
+        "A03": 3716,
+        "A04": 3716,
+        "A05": 3716,
+        "A06": 3716
+      },
+      "audio_files": 24986,
+      "duration_hours": 24.00284751736116,
+      "labels": {
+        "bonafide": 2548,
+        "spoof": 22296
+      },
+      "sample_rates_hz": {
+        "16000": 24844
+      },
+      "speakers": 20,
+      "unreferenced_audio_files": 142,
+      "utterances": 24844
+    },
+    "eval": {
+      "attack_ids": {
+        "-": 7355,
+        "A07": 4914,
+        "A08": 4914,
+        "A09": 4914,
+        "A10": 4914,
+        "A11": 4914,
+        "A12": 4914,
+        "A13": 4914,
+        "A14": 4914,
+        "A15": 4914,
+        "A16": 4914,
+        "A17": 4914,
+        "A18": 4914,
+        "A19": 4914
+      },
+      "audio_files": 71933,
+      "duration_hours": 61.49521059027763,
+      "labels": {
+        "bonafide": 7355,
+        "spoof": 63882
+      },
+      "sample_rates_hz": {
+        "16000": 71237
+      },
+      "speakers": 67,
+      "unreferenced_audio_files": 696,
+      "utterances": 71237
+    },
+    "train": {
+      "attack_ids": {
+        "-": 2580,
+        "A01": 3800,
+        "A02": 3800,
+        "A03": 3800,
+        "A04": 3800,
+        "A05": 3800,
+        "A06": 3800
+      },
+      "audio_files": 25380,
+      "duration_hours": 24.152060347222132,
+      "labels": {
+        "bonafide": 2580,
+        "spoof": 22800
+      },
+      "sample_rates_hz": {
+        "16000": 25380
+      },
+      "speakers": 20,
+      "unreferenced_audio_files": 0,
+      "utterances": 25380
+    }
+  },
+  "utterance_overlap": false
+}

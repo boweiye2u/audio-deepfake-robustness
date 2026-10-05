@@ -1,0 +1,3 @@
+purpose: final_evaluation
+model_selection_allowed: false
+manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/final-evaluation/eval.csv
