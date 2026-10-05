@@ -113,3 +113,14 @@ def test_phase5b_probability_configs_change_only_probability_paths(
     assert candidate["training"] == reference["training"]
     assert candidate["selection_conditions"] == reference["selection_conditions"]
     assert candidate["evaluation_conditions"] == reference["evaluation_conditions"]
+
+
+def test_phase5b_tradeoff_helpers():
+    from scripts.analyze_augmentation_probability_5b import gain_retained, penalty_recovered
+
+    assert gain_retained(0.30, 0.10, 0.15) == pytest.approx(0.75)
+    assert penalty_recovered(0.05, 0.09, 0.06) == pytest.approx(0.75)
+    with pytest.raises(ValueError):
+        gain_retained(0.10, 0.20, 0.15)
+    with pytest.raises(ValueError):
+        penalty_recovered(0.10, 0.05, 0.08)

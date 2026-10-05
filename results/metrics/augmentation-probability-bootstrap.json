@@ -1,0 +1,93 @@
+{
+  "method": "paired class-stratified DEV-utterance bootstrap",
+  "comparisons": {
+    "clean": {
+      "p20_minus_p0": {
+        "difference": 0.006146853044438773,
+        "ci_95": [
+          0.0032370362030710847,
+          0.008868179699911195
+        ],
+        "replicates": 2000,
+        "seed": 20261013,
+        "unit": "paired class-stratified DEV utterance"
+      },
+      "p20_minus_p50": {
+        "difference": -0.010499075565198898,
+        "ci_95": [
+          -0.012805414594973271,
+          -0.008489649723983887
+        ],
+        "replicates": 2000,
+        "seed": 20261014,
+        "unit": "paired class-stratified DEV utterance"
+      }
+    },
+    "noise_10db": {
+      "p20_minus_p0": {
+        "difference": -0.1214753379760504,
+        "ci_95": [
+          -0.12843512179310732,
+          -0.11373341047354979
+        ],
+        "replicates": 2000,
+        "seed": 20261015,
+        "unit": "paired class-stratified DEV utterance"
+      },
+      "p20_minus_p50": {
+        "difference": 0.023682668673442195,
+        "ci_95": [
+          0.020962076627730964,
+          0.02698054018742547
+        ],
+        "replicates": 2000,
+        "seed": 20261016,
+        "unit": "paired class-stratified DEV utterance"
+      }
+    },
+    "noise_5db": {
+      "p20_minus_p0": {
+        "difference": -0.23195307412312854,
+        "ci_95": [
+          -0.2411021830817935,
+          -0.2242287769246842
+        ],
+        "replicates": 2000,
+        "seed": 20261017,
+        "unit": "paired class-stratified DEV utterance"
+      },
+      "p20_minus_p50": {
+        "difference": 0.03159535460012161,
+        "ci_95": [
+          0.027807726620774454,
+          0.035160214516377034
+        ],
+        "replicates": 2000,
+        "seed": 20261018,
+        "unit": "paired class-stratified DEV utterance"
+      }
+    },
+    "clean_a06": {
+      "p20_minus_p0": {
+        "difference": 0.026838556901604735,
+        "ci_95": [
+          0.02042097786369662,
+          0.033447626173099015
+        ],
+        "replicates": 2000,
+        "seed": 20261019,
+        "unit": "paired class-stratified DEV utterance"
+      },
+      "p20_minus_p50": {
+        "difference": -0.03627911378180482,
+        "ci_95": [
+          -0.040899343301119384,
+          -0.031130327845305613
+        ],
+        "replicates": 2000,
+        "seed": 20261020,
+        "unit": "paired class-stratified DEV utterance"
+      }
+    }
+  }
+}
