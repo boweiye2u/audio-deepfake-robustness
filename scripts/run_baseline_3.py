@@ -233,7 +233,7 @@ def run_head_training(
                 loss = criterion(logits, labels)
             loss.backward()
             optimizer.step()
-            total_loss += float(loss) * len(labels)
+            total_loss += float(loss.detach()) * len(labels)
             count += len(labels)
         scores = predict(
             model, dev_payload["embeddings"], config["training"]["batch_size"], device
