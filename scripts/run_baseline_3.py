@@ -171,9 +171,8 @@ def predict(
     loader = DataLoader(TensorDataset(embeddings), batch_size=batch_size, shuffle=False)
     with torch.inference_mode():
         for (features,) in loader:
-            with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
-                logits = model(features.to(device, non_blocking=True))
-            scores.append(torch.sigmoid(logits).float().cpu())
+            logits = model(features.to(device, non_blocking=True))
+            scores.append(torch.sigmoid(logits).cpu())
     return torch.cat(scores).numpy()
 
 
