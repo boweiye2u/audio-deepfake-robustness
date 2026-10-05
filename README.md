@@ -3,8 +3,8 @@
 A reproducible study of how synthetic-speech detectors respond to realistic audio
 transformations and whether targeted augmentation can improve robustness.
 
-> **Status:** frozen WavLM baseline, corruption evaluation, and controlled augmentation-probability
-> study completed on the official development split. The evaluation split remains untouched.
+> **Status:** complete. Development choices were frozen before final evaluation on 71,237 official
+> ASVspoof 2019 LA EVAL trials with unseen attacks A07–A19.
 
 ## Research question
 
@@ -17,7 +17,7 @@ without sacrificing clean accuracy?
 - **Dataset:** ASVspoof 2019 Logical Access, official protocols validated
 - **Baseline:** frozen WavLM Base Plus encoder with a compact linear head
 - **Model selection:** official development split only
-- **Final evaluation:** untouched official evaluation split
+- **Final evaluation:** one frozen run on the previously untouched official EVAL split
 - **Metrics:** EER, ROC-AUC, balanced accuracy, precision, recall, and F1
 - **Shifts:** MP3 128/64/32 kbps, 8 kHz round-trip resampling, noise at 20/10/5 dB SNR
 - **Mitigation:** mixed-condition corruption augmentation
@@ -104,6 +104,31 @@ selected `p=0.20`: three-seed clean EER is 0.0583 and mean noise EER is 0.1100,
 retaining 86.6% of the `p=0.50` noise gain while recovering 63.1% of its clean penalty.
 See the [Phase 5 report](docs/phase5-noise-augmentation-report.md) and
 [Phase 5b report](docs/phase5b-augmentation-probability-report.md).
+
+## Final unseen-attack evaluation
+
+The protocol was committed before evaluating 71,237 official EVAL trials containing
+unseen attacks A07–A19. The selected `p=0.20` strategy preserved clean ranking EER
+(0.0609 versus 0.0600 baseline) while reducing EER under 20/10/5 dB noise from
+0.1406/0.2126/0.3154 to **0.0760/0.0960/0.1189**. Paired bootstrap intervals show
+large noise gains; the small clean EER difference is inconclusive. MP3 and 8 kHz
+resampling again produced slightly lower EER than clean audio for both strategies.
+
+![Final held-out EVAL EER](results/figures/final-evaluation-eer.png)
+
+See the [final evaluation report](docs/phase6-final-evaluation-report.md) for per-seed,
+A07–A19, score-shift, uncertainty, and DEV-versus-EVAL results.
+
+## Reproduce the frozen final evaluation
+
+~~~bash
+python -m scripts.run_final_evaluation_6 --phase preflight
+python -m scripts.run_final_evaluation_6 --phase condition --condition clean --device cuda:0
+# Repeat the condition command for the seven remaining frozen conditions.
+python -m scripts.run_final_evaluation_6 --phase analyze
+~~~
+
+Heavy datasets, caches, checkpoints, and prediction arrays remain under `~/audio`.
 
 ## Limitations
 
