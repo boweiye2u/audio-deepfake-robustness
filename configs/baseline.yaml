@@ -1,41 +1,51 @@
 experiment:
-  name: baseline_logmel_cnn
-  seed: 20261004
+  id: wavlm-base-plus-frozen-v1
+  seed: 20261007
 
 paths:
   train_manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/development/train.csv
   dev_manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/development/dev.csv
-  checkpoint_dir: ${AUDIO_MODEL_ROOT}/checkpoints/baseline
-  output_dir: ${AUDIO_OUTPUT_ROOT}/experiments/baseline
-
-audio:
-  sample_rate: 16000
-  duration_seconds: 4.0
-  mono: true
-
-features:
-  n_fft: 512
-  win_length: 400
-  hop_length: 160
-  n_mels: 80
-  f_min: 20
-  f_max: 8000
+  feature_cache: ${AUDIO_CACHE_ROOT}/features/wavlm-base-plus-frozen-v1
+  checkpoint_dir: ${AUDIO_MODEL_ROOT}/audio-deepfake/wavlm-base-plus-frozen-v1
+  output_dir: ${AUDIO_OUTPUT_ROOT}/experiments/wavlm-base-plus-frozen-v1
 
 model:
-  name: compact_logmel_cnn
-  channels: [32, 64, 128]
-  dropout: 0.2
+  name: microsoft/wavlm-base-plus
+  revision: 4c66d4806a428f2e922ccfa1a962776e232d487b
+  hidden_size: 768
+  pooling: masked_mean_last_hidden_state
+  encoder_frozen: true
+  dropout: 0.1
+
+preprocessing:
+  sample_rate: 16000
+  max_duration_seconds: 4.0
+  crop_strategy: center
+  mono: true
+
+feature_extraction:
+  batch_size: 32
+  num_workers: 8
+  precision: bfloat16
 
 training:
-  epochs: 30
-  batch_size: 64
-  learning_rate: 0.0003
-  weight_decay: 0.0001
-  num_workers: 8
-  selection_metric: dev_eer
-  early_stopping_patience: 5
-
-evaluation:
   positive_label: spoof
-  threshold_source: dev
-  metrics: [eer, roc_auc, balanced_accuracy, precision, recall, f1]
+  imbalance_strategy: class_weighted_bce
+  batch_size: 512
+  gradient_accumulation: 1
+  epochs: 30
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  scheduler: none
+  early_stopping_patience: 5
+  mixed_precision: bfloat16
+  checkpoint_selection: lowest_dev_eer_then_highest_pr_auc_then_earliest_epoch
+  threshold_selection: maximum_dev_balanced_accuracy_closest_to_0.5_on_ties
+
+stages:
+  smoke_train_samples: 8
+  smoke_dev_samples: 8
+  subset_train_samples: 1024
+  subset_dev_samples: 512
+  subset_epochs: 3
