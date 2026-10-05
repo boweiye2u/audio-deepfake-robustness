@@ -1,0 +1,66 @@
+{
+  "checkpoint_sha256": "0d16ce385c2171c4a161dd6ff4c66f8570b9b0b4f1b990c2e7bfb93117fa9800",
+  "config_sha256": "1b570a29c3ecf50c15ae9a7e8b15c69046a15f1b2f9e7cdb23205d903140742c",
+  "cpu_replay_max_abs_score_difference": 5.960464477539062e-07,
+  "dev_count": 24844,
+  "dev_samples": 24844,
+  "encoder_parameters": 94381936,
+  "experiment_id": "wavlm-base-plus-frozen-v1",
+  "feature_cache_creation_seconds": 68.7322160191834,
+  "feature_cache_source_commit": "45b8679a61021c7a732f71bcbd6957bbcf60f6bc",
+  "feature_extraction_seconds": 0.0,
+  "git_commit": "56d5969f2d6d69d309e1c4a302ebbc7d74e462e5",
+  "gpu": "NVIDIA L40S",
+  "metrics": {
+    "balanced_accuracy": 0.9500351767766807,
+    "confusion_matrix": [
+      [
+        2468,
+        80
+      ],
+      [
+        1528,
+        20768
+      ]
+    ],
+    "decision_threshold": 0.693742573261261,
+    "eer": 0.0521978021978022,
+    "eer_threshold": 0.5879972747394018,
+    "f1": 0.9627294641201558,
+    "pr_auc": 0.9988034675852056,
+    "precision": 0.9961627014581734,
+    "recall": 0.9314675278076785,
+    "roc_auc": 0.9897826108997875
+  },
+  "model": {
+    "dropout": 0.1,
+    "encoder_frozen": true,
+    "hidden_size": 768,
+    "name": "microsoft/wavlm-base-plus",
+    "pooling": "masked_mean_last_hidden_state",
+    "revision": "4c66d4806a428f2e922ccfa1a962776e232d487b"
+  },
+  "model_name": "microsoft/wavlm-base-plus",
+  "model_revision": "4c66d4806a428f2e922ccfa1a962776e232d487b",
+  "peak_gpu_bytes_feature_extraction": 0,
+  "peak_gpu_bytes_overall": 2550470656,
+  "peak_gpu_bytes_training": 22192640,
+  "pos_weight": 0.11315789818763733,
+  "positive_label": "spoof",
+  "seed": 20261007,
+  "selected_checkpoint": "~/audio/models/audio-deepfake/wavlm-base-plus-frozen-v1/full/selected.pt",
+  "selected_epoch": 30,
+  "selection_rule": "lowest_dev_eer_then_highest_pr_auc_then_earliest_epoch",
+  "stage": "full",
+  "threshold": 0.693742573261261,
+  "threshold_rule": "maximum_dev_balanced_accuracy_closest_to_0.5_on_ties",
+  "total_pipeline_seconds": 78.98320423439145,
+  "train_class_counts": {
+    "bonafide": 2580,
+    "spoof": 22800
+  },
+  "train_count": 25380,
+  "train_samples": 25380,
+  "trainable_parameters": 2305,
+  "training_seconds": 10.250988215208054
+}

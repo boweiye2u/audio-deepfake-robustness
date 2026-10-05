@@ -3,8 +3,8 @@
 A reproducible study of how synthetic-speech detectors respond to realistic audio
 transformations and whether targeted augmentation can improve robustness.
 
-> **Status:** environment and ASVspoof data preparation pipeline established. No
-> model, benchmark result, or robustness claim has been produced yet.
+> **Status:** clean WavLM baseline completed on the official development split.
+> Final evaluation and robustness experiments remain untouched.
 
 ## Research question
 
@@ -81,13 +81,13 @@ python -m pytest
 CUDA-enabled PyTorch 2.9.1 (CUDA 12.6) is installed in the isolated environment.
 Dataset preparation is separate from model training, which remains deferred.
 
-## Results
+## DEV baseline
 
-Results are intentionally blank during setup.
+These are development-set results used for model selection, not final evaluation.
 
-| System | Condition | EER | ROC-AUC | F1 | Relative degradation |
-|---|---|---:|---:|---:|---:|
-| Pending | Pending | — | — | — | — |
+| System | EER | ROC-AUC | PR-AUC | Balanced accuracy | F1 |
+|---|---:|---:|---:|---:|---:|
+| Frozen WavLM Base Plus + linear head | 0.0522 | 0.9898 | 0.9988 | 0.9500 | 0.9627 |
 
 ## Limitations
 

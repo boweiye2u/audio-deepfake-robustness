@@ -327,7 +327,7 @@ def write_analysis(
     repository_figures = REPOSITORY_ROOT / "results" / "figures"
     repository_metrics.mkdir(parents=True, exist_ok=True)
     repository_figures.mkdir(parents=True, exist_ok=True)
-    summary = {key: value for key, value in result.items() if key != "history"}
+    summary = {key: value for key, value in result.items() if key not in {"history", "config"}}
     checkpoint = Path(summary["selected_checkpoint"])
     try:
         summary["selected_checkpoint"] = "~/" + checkpoint.relative_to(Path.home()).as_posix()
