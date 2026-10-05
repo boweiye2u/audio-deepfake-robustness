@@ -1,0 +1,41 @@
+experiment:
+  id: wavlm-base-plus-frozen-robustness-v1
+  seed: 20261008
+
+paths:
+  dev_manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/development/dev.csv
+  checkpoint: ${AUDIO_MODEL_ROOT}/audio-deepfake/wavlm-base-plus-frozen-v1/full/selected.pt
+  feature_cache: ${AUDIO_CACHE_ROOT}/features/wavlm-base-plus-robustness-v1
+  output_dir: ${AUDIO_OUTPUT_ROOT}/experiments/wavlm-base-plus-robustness-v1
+
+frozen:
+  checkpoint_sha256: 0d16ce385c2171c4a161dd6ff4c66f8570b9b0b4f1b990c2e7bfb93117fa9800
+  threshold: 0.693742573261261
+  model: microsoft/wavlm-base-plus
+  revision: 4c66d4806a428f2e922ccfa1a962776e232d487b
+  pooling: masked_mean_last_hidden_state
+  max_duration_seconds: 4.0
+  sample_rate: 16000
+  crop_strategy: center
+
+inference:
+  batch_size: 32
+  num_workers: 16
+  precision: bfloat16_encoder_fp32_head
+  device: cuda:0
+
+conditions:
+  - clean
+  - mp3_128k
+  - mp3_64k
+  - mp3_32k
+  - resample_8k
+  - noise_20db
+  - noise_10db
+  - noise_5db
+
+uncertainty:
+  method: paired_stratified_utterance_bootstrap
+  replicates: 2000
+  confidence: 0.95
+  seed: 20261009
