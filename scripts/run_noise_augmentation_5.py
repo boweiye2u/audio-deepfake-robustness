@@ -546,10 +546,13 @@ def preflight(config, roots):
 
 
 def main():
+    global CONFIG_PATH
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", required=True, choices=("preflight", "train", "analyze"))
     parser.add_argument("--seed", type=int)
+    parser.add_argument("--config", type=Path, default=CONFIG_PATH)
     args = parser.parse_args()
+    CONFIG_PATH = args.config.resolve()
     roots = ArtifactRoots.from_environment()
     for name, value in {"AUDIO_DATA_ROOT": roots.data, "AUDIO_MODEL_ROOT": roots.models,
                         "AUDIO_CACHE_ROOT": roots.cache, "AUDIO_OUTPUT_ROOT": roots.outputs}.items():

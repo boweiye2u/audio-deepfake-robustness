@@ -92,3 +92,24 @@ def test_existing_manifest_guard_refuses_eval(tmp_path):
         writer.writerow(row)
     with pytest.raises(PermissionError):
         load_development_manifest(manifest, tmp_path)
+
+@pytest.mark.parametrize(
+    ("path", "probability"),
+    [
+        ("configs/noise_augmentation_5b_p20.yaml", 0.2),
+        ("configs/noise_augmentation_5b_p35.yaml", 0.35),
+    ],
+)
+def test_phase5b_probability_configs_change_only_probability_paths(
+    path, probability, monkeypatch, tmp_path
+):
+    for name in ["AUDIO_DATA_ROOT", "AUDIO_MODEL_ROOT", "AUDIO_CACHE_ROOT", "AUDIO_OUTPUT_ROOT"]:
+        monkeypatch.setenv(name, str(tmp_path))
+    reference = load_config("configs/noise_augmentation_5.yaml")
+    candidate = load_config(path)
+    assert candidate["augmentation"]["probability"] == probability
+    assert candidate["augmentation"]["snr_db_choices"] == reference["augmentation"]["snr_db_choices"]
+    assert candidate["model"] == reference["model"]
+    assert candidate["training"] == reference["training"]
+    assert candidate["selection_conditions"] == reference["selection_conditions"]
+    assert candidate["evaluation_conditions"] == reference["evaluation_conditions"]

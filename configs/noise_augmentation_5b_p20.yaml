@@ -1,0 +1,62 @@
+experiment:
+  id: wavlm-noise-augmented-p20-v1
+  development_seed: 20261010
+  final_seeds: [20261010, 20261011, 20261012]
+
+paths:
+  train_manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/development/train.csv
+  dev_manifest: ${AUDIO_DATA_ROOT}/asvspoof2019/manifests/development/dev.csv
+  baseline_checkpoint: ${AUDIO_MODEL_ROOT}/audio-deepfake/wavlm-base-plus-frozen-v1/full/selected.pt
+  baseline_checkpoint_sha256: 0d16ce385c2171c4a161dd6ff4c66f8570b9b0b4f1b990c2e7bfb93117fa9800
+  phase4_cache: ${AUDIO_CACHE_ROOT}/features/wavlm-base-plus-robustness-v1
+  feature_cache: ${AUDIO_CACHE_ROOT}/features/wavlm-noise-augmented-p20-v1
+  checkpoint_dir: ${AUDIO_MODEL_ROOT}/audio-deepfake/wavlm-noise-augmented-p20-v1
+  output_dir: ${AUDIO_OUTPUT_ROOT}/experiments/wavlm-noise-augmented-p20-v1
+
+model:
+  name: microsoft/wavlm-base-plus
+  revision: 4c66d4806a428f2e922ccfa1a962776e232d487b
+  hidden_size: 768
+  pooling: masked_mean_last_hidden_state
+  encoder_frozen: true
+  dropout: 0.1
+
+preprocessing:
+  sample_rate: 16000
+  max_duration_seconds: 4.0
+  crop_strategy: center
+
+augmentation:
+  kind: additive_gaussian_noise
+  probability: 0.2
+  snr_db_choices: [20.0, 10.0, 5.0]
+  sampling: deterministic_uniform_discrete_per_utterance_and_seed
+  apply_to: train_only
+
+feature_extraction:
+  batch_size: 32
+  num_workers: 16
+  precision: bfloat16
+
+training:
+  positive_label: spoof
+  imbalance_strategy: class_weighted_bce
+  batch_size: 512
+  epochs: 30
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  scheduler: none
+  early_stopping_patience: 5
+  mixed_precision: bfloat16
+  checkpoint_selection: lowest_mean_eer_clean_noise20_noise10_noise5_then_clean_eer_then_earliest
+  threshold_selection: clean_dev_maximum_balanced_accuracy_closest_to_0.5_on_ties
+
+selection_conditions: [clean, noise_20db, noise_10db, noise_5db]
+evaluation_conditions: [clean, mp3_128k, mp3_64k, mp3_32k, resample_8k, noise_20db, noise_10db, noise_5db]
+
+uncertainty:
+  method: paired_class_stratified_utterance_bootstrap_mean_over_three_seeds
+  replicates: 2000
+  confidence: 0.95
+  seed: 20261013
