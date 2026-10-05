@@ -3,8 +3,8 @@
 A reproducible study of how synthetic-speech detectors respond to realistic audio
 transformations and whether targeted augmentation can improve robustness.
 
-> **Status:** frozen WavLM baseline and corruption robustness evaluation completed
-> on the official development split. The official evaluation split remains untouched.
+> **Status:** frozen WavLM baseline, corruption evaluation, and controlled noise-augmentation
+> training completed on the official development split. The evaluation split remains untouched.
 
 ## Research question
 
@@ -94,6 +94,13 @@ round trip did not degrade ranking on DEV, while additive noise was the clear fa
 mode: EER increased from 0.0522 clean to 0.1035, 0.2260, and 0.3902 at 20, 10, and
 5 dB SNR. See the [Phase 4 robustness report](docs/phase4-robustness-report.md) for
 paired confidence intervals, attack-specific results, score shifts, and limitations.
+
+## Noise-augmentation result
+
+Waveform-level Gaussian-noise augmentation reduces mean DEV EER from 0.1035 to
+0.0619 at 20 dB, 0.2260 to 0.0808 at 10 dB, and 0.3902 to 0.1267 at 5 dB. The
+tradeoff is a clean EER increase from 0.0522 to 0.0688. See the
+[Phase 5 report](docs/phase5-noise-augmentation-report.md) for the three-seed analysis.
 
 ## Limitations
 
